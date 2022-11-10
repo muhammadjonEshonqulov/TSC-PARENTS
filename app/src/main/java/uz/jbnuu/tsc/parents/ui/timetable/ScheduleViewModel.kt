@@ -15,6 +15,7 @@ import uz.jbnuu.tsc.parents.model.semester.SemestersResponse
 import uz.jbnuu.tsc.parents.utils.NetworkResult
 import uz.jbnuu.tsc.parents.utils.handleResponse
 import uz.jbnuu.tsc.parents.utils.hasInternetConnection
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,8 +34,10 @@ class ScheduleViewModel @Inject constructor(
             try {
                 val response = repository.remote.semesters()
                 _semestersResponse.send(handleResponse(response))
+            } catch (e: SocketTimeoutException) {
+                _semestersResponse.send(NetworkResult.Error(App.context.getString(R.string.bad_network_message)))
             } catch (e: Exception) {
-                _semestersResponse.send(NetworkResult.Error("Xatolik : " + e.message))
+                _semestersResponse.send(NetworkResult.Error(App.context.getString(R.string.onother_error) + e.message))
             }
         } else {
             _semestersResponse.send(NetworkResult.Error(App.context.getString(R.string.connection_error)))
@@ -50,8 +53,10 @@ class ScheduleViewModel @Inject constructor(
             try {
                 val response = repository.remote.schedule(week)
                 _scheduleResponse.send(handleResponse(response))
+            } catch (e: SocketTimeoutException) {
+                _scheduleResponse.send(NetworkResult.Error(App.context.getString(R.string.bad_network_message)))
             } catch (e: Exception) {
-                _scheduleResponse.send(NetworkResult.Error("Xatolik : " + e.message))
+                _scheduleResponse.send(NetworkResult.Error(App.context.getString(R.string.onother_error) + e.message))
             }
         } else {
             _scheduleResponse.send(NetworkResult.Error(App.context.getString(R.string.connection_error)))

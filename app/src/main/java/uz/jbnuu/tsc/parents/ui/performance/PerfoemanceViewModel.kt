@@ -17,6 +17,7 @@ import uz.jbnuu.tsc.parents.model.semester.SemestersResponse
 import uz.jbnuu.tsc.parents.utils.NetworkResult
 import uz.jbnuu.tsc.parents.utils.handleResponse
 import uz.jbnuu.tsc.parents.utils.hasInternetConnection
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,8 +36,10 @@ class PerfoemanceViewModel @Inject constructor(
             try {
                 val response = repository.remote.semesters()
                 _semestersResponse.send(handleResponse(response))
+            } catch (e: SocketTimeoutException) {
+                _semestersResponse.send(NetworkResult.Error(App.context.getString(R.string.bad_network_message)))
             } catch (e: Exception) {
-                _semestersResponse.send(NetworkResult.Error("Xatolik : " + e.message))
+                _semestersResponse.send(NetworkResult.Error(App.context.getString(R.string.onother_error) + e.message))
             }
         } else {
             _semestersResponse.send(NetworkResult.Error(App.context.getString(R.string.connection_error)))
@@ -52,8 +55,10 @@ class PerfoemanceViewModel @Inject constructor(
             try {
                 val response = repository.remote.performance()
                 _performanceResponse.send(handleResponse(response))
+            } catch (e: SocketTimeoutException) {
+                _performanceResponse.send(NetworkResult.Error(App.context.getString(R.string.bad_network_message)))
             } catch (e: Exception) {
-                _performanceResponse.send(NetworkResult.Error("Xatolik : " + e.message))
+                _performanceResponse.send(NetworkResult.Error(App.context.getString(R.string.onother_error) + e.message))
             }
         } else {
             _performanceResponse.send(NetworkResult.Error(App.context.getString(R.string.connection_error)))
@@ -69,8 +74,10 @@ class PerfoemanceViewModel @Inject constructor(
             try {
                 val response = repository.remote.loginHemis(loginHemisBody)
                 _loginHemisResponse.send(handleResponse(response))
+            } catch (e: SocketTimeoutException) {
+                _loginHemisResponse.send(NetworkResult.Error(App.context.getString(R.string.bad_network_message)))
             } catch (e: Exception) {
-                _loginHemisResponse.send(NetworkResult.Error("Xatolik : " + e.message))
+                _loginHemisResponse.send(NetworkResult.Error(App.context.getString(R.string.onother_error) + e.message))
             }
         } else {
             _loginHemisResponse.send(NetworkResult.Error(App.context.getString(R.string.connection_error)))

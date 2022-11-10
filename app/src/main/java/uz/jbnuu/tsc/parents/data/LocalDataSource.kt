@@ -21,7 +21,7 @@ class LocalDataSource @Inject constructor(private val dao: MyDao) {
         return dao.insertTaskData(data)
     }
 
-    fun getTaskData(): Flow<List<Task>> = dao.getTaskData()
+    fun getTaskData(student_id: Int): Flow<List<Task>> = dao.getTaskData(student_id)
 
     suspend fun clearTaskData() {
         return dao.clearTaskData()

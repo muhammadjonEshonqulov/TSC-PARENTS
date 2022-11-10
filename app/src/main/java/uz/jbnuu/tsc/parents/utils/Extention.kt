@@ -26,6 +26,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
+import uz.jbnuu.tsc.parents.BuildConfig
 import uz.jbnuu.tsc.parents.R
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -47,9 +48,9 @@ fun snackBar(binding: ViewBinding, message: String) {
 }
 
 fun lg(message: String) {
-//    if (BuildConfig.isDebug) {
+    if (BuildConfig.isDebug) {
         Log.d("TSC", message)
-//    }
+    }
 }
 
 fun getHour(): Int {

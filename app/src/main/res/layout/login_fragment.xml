@@ -28,35 +28,32 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/logo_main" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/actionbar_size"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/backgroung_line"
-                android:paddingStart="@dimen/small_margin">
-
-                <Spinner
-                    android:id="@+id/spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/default_margin"
+                android:layout_marginBottom="@dimen/normal_size"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="TSC PARENTS"
+                android:textColor="@color/cl_color_primary"
+                android:textSize="@dimen/standard_text_size"
+                android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/login_auth_lay"
                 style="@style/TextInputLayoutStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/left_right_margin_size"
+                android:layout_marginTop="@dimen/normal_size"
                 android:layout_marginBottom="@dimen/left_right_margin_size"
                 app:endIconMode="clear_text"
                 app:endIconTint="@color/default_text_color">
-
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/login_auth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/ic_baseline_person_outline_24"
                     android:fontFamily="@font/montserrat_medium"
                     android:hint="Login"
                     android:inputType="textEmailAddress"
@@ -74,7 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:endIconMode="password_toggle"
-                app:endIconTint="@color/default_text_color"
+                app:endIconTint="@color/cl_color_primary"
                 app:endIconTintMode="src_in">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -90,25 +87,26 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/forget_password"
-                android:layout_width="wrap_content"
+                android:id="@+id/register_btn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginTop="@dimen/default_margin"
-                android:background="?selectableItemBackground"
+                android:layout_marginBottom="@dimen/left_right_margin_size"
                 android:clickable="true"
                 android:focusable="true"
                 android:fontFamily="@font/montserrat_medium"
                 android:foreground="?selectableItemBackground"
                 android:gravity="center"
                 android:padding="@dimen/default_margin"
-                android:text="Parolni unutdingizmi?"
+                android:text="Ro'yxatdan o'tish"
                 android:textColor="@color/cl_color_primary"
                 android:textSize="@dimen/standard_text_size" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:layout_marginTop="@dimen/left_right_margin_size"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="@dimen/left_right_margin_size">

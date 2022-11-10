@@ -3,44 +3,45 @@ package uz.jbnuu.tsc.parents.data
 import okhttp3.ResponseBody
 import retrofit2.Response
 import uz.jbnuu.tsc.parents.data.network.ApiService
-import uz.jbnuu.tsc.parents.model.StatisticResponse
 import uz.jbnuu.tsc.parents.model.SubjectResponse
 import uz.jbnuu.tsc.parents.model.attendance.AttendanceResponse
 import uz.jbnuu.tsc.parents.model.examTable.ExamTableResponse
-import uz.jbnuu.tsc.parents.model.group.GroupResponse
+import uz.jbnuu.tsc.parents.model.getStudents.ParentGetStudentsResponse
 import uz.jbnuu.tsc.parents.model.history_location.LocationHistoryBody
 import uz.jbnuu.tsc.parents.model.history_location.LocationHistoryResponse
+import uz.jbnuu.tsc.parents.model.login.LoginParentsResponse
 import uz.jbnuu.tsc.parents.model.login.LogoutResponse
-import uz.jbnuu.tsc.parents.model.login.admin.AdminResponse
 import uz.jbnuu.tsc.parents.model.login.hemis.LoginHemisResponse
+import uz.jbnuu.tsc.parents.model.login.parents.ConnectParentResponse
+import uz.jbnuu.tsc.parents.model.login.parents.LoginParentBody
+import uz.jbnuu.tsc.parents.model.login.parents.LoginStudentToConnectParentBody
 import uz.jbnuu.tsc.parents.model.login.student.LoginStudentBody
-import uz.jbnuu.tsc.parents.model.login.student.LoginStudentResponse
-import uz.jbnuu.tsc.parents.model.login.tyuter.LoginTyuterBody
-import uz.jbnuu.tsc.parents.model.login.tyuter.LoginTyuterResponse
 import uz.jbnuu.tsc.parents.model.me.MeResponse
 import uz.jbnuu.tsc.parents.model.performance.PerformanceResponse
 import uz.jbnuu.tsc.parents.model.reference.ReferenceResponse
+import uz.jbnuu.tsc.parents.model.register.RegisterBody
+import uz.jbnuu.tsc.parents.model.register.RegisterResponse
+import uz.jbnuu.tsc.parents.model.remove.RemoveStudentBody
+import uz.jbnuu.tsc.parents.model.remove.RemoveStudentResponse
 import uz.jbnuu.tsc.parents.model.schedule.ScheduleResponse
 import uz.jbnuu.tsc.parents.model.semester.SemestersResponse
-import uz.jbnuu.tsc.parents.model.send_location.SendLocationArrayBody
-import uz.jbnuu.tsc.parents.model.send_location.SendLocationBody
-import uz.jbnuu.tsc.parents.model.send_location.SendLocationResponse
 import uz.jbnuu.tsc.parents.model.student.PushNotification
-import uz.jbnuu.tsc.parents.model.student.StudentBody
-import uz.jbnuu.tsc.parents.model.student.StudentResponse
 import uz.jbnuu.tsc.parents.model.subjects.SubjectsResponse
-import uz.jbnuu.tsc.parents.model.tutors.GetTutorsResponse
+import uz.jbnuu.tsc.parents.model.type_tarif.ChangeTarifBody
+import uz.jbnuu.tsc.parents.model.type_tarif.ChangeTarifResponse
+import uz.jbnuu.tsc.parents.model.type_tarif.TarifMatnResponse
+import uz.jbnuu.tsc.parents.model.type_tarif.TarifResponse
 import javax.inject.Inject
 import javax.inject.Named
 
 class RemoteDataSource @Inject constructor(@Named("provideApiService") val apiService: ApiService, @Named("provideApiServiceHemis") val apiServiceHemis: ApiService) {
 
-    suspend fun loginStudent(loginStudentBody: LoginStudentBody): Response<LoginStudentResponse> {
-        return apiService.loginStudent(loginStudentBody)
+    suspend fun connectParentStudent(loginStudentToConnectParentBody: LoginStudentToConnectParentBody): Response<ConnectParentResponse> {
+        return apiService.connectParentStudent(loginStudentToConnectParentBody)
     }
 
-    suspend fun loginTyuter(loginTyuterBody: LoginTyuterBody): Response<LoginTyuterResponse> {
-        return apiService.loginTyuter(loginTyuterBody)
+    suspend fun loginParents(loginParentBody: LoginParentBody): Response<LoginParentsResponse> {
+        return apiService.loginParents(loginParentBody)
     }
 
     suspend fun postNotification(full_url: String, notification: PushNotification): Response<ResponseBody> {
@@ -49,6 +50,31 @@ class RemoteDataSource @Inject constructor(@Named("provideApiService") val apiSe
 
     suspend fun me(): Response<MeResponse> {
         return apiServiceHemis.me()
+    }
+
+    suspend fun tarifMatn(): Response<TarifMatnResponse> {
+        return apiService.tarifMatn()
+    }
+
+
+    suspend fun parentGetStudents(): Response<ParentGetStudentsResponse> {
+        return apiService.parentGetStudents()
+    }
+
+    suspend fun getTarifsme(): Response<TarifResponse> {
+        return apiService.getTarifsme()
+    }
+
+    suspend fun updateTarif(changeTarifBody: ChangeTarifBody): Response<ChangeTarifResponse> {
+        return apiService.updateTarif(changeTarifBody)
+    }
+
+    suspend fun updateParent(registerBody: RegisterBody): Response<TarifMatnResponse> {
+        return apiService.updateParent(registerBody)
+    }
+
+    suspend fun disconnectParentStudent(removeStudentBody: RemoveStudentBody): Response<RemoveStudentResponse> {
+        return apiService.disconnectParentStudent(removeStudentBody)
     }
 
     suspend fun studentReference(): Response<ReferenceResponse> {
@@ -61,6 +87,10 @@ class RemoteDataSource @Inject constructor(@Named("provideApiService") val apiSe
 
     suspend fun loginHemis(loginHemisBody: LoginStudentBody): Response<LoginHemisResponse> {
         return apiServiceHemis.loginHemis(loginHemisBody)
+    }
+
+    suspend fun createParent(registerBody: RegisterBody): Response<RegisterResponse> {
+        return apiService.createParent(registerBody)
     }
 
     suspend fun subjects(): Response<SubjectsResponse> {
@@ -91,50 +121,8 @@ class RemoteDataSource @Inject constructor(@Named("provideApiService") val apiSe
         return apiService.logout()
     }
 
-
-    suspend fun getGroups(): Response<GroupResponse> {
-        return apiService.getGroups()
-    }
-
-    suspend fun getStudents(studentBody: StudentBody?): Response<StudentResponse> {
-        return apiService.getStudents(studentBody?.group_id, studentBody?.key, studentBody?.value)
-    }
-
     suspend fun getLocationHistory(locationHistoryBody: LocationHistoryBody): Response<LocationHistoryResponse> {
         return apiService.getLocationHistory(locationHistoryBody.student_id, 50, locationHistoryBody.page)
-    }
-
-    suspend fun getAdminLocationHistory(locationHistoryBody: LocationHistoryBody): Response<LocationHistoryResponse> {
-        return apiService.getAdminLocationHistory(locationHistoryBody.student_id, 50, locationHistoryBody.page)
-    }
-
-    suspend fun sendLocation(sendLocationBody: SendLocationBody): Response<SendLocationResponse> {
-        return apiService.sendLocation(sendLocationBody)
-    }
-
-    suspend fun sendLocation1(sendLocationBody: SendLocationBody): Response<SendLocationResponse> {
-        return apiService.sendLocation1(sendLocationBody)
-    }
-
-    suspend fun sendLocationArray(sendLocationArrayBody: SendLocationArrayBody): Response<LogoutResponse> {
-        return apiService.sendLocationArray(sendLocationArrayBody)
-    }
-
-    //   99 180 03 37
-    suspend fun sendLocationArray1(sendLocationArrayBody: SendLocationArrayBody): Response<LogoutResponse> {
-        return apiService.sendLocationArray1(sendLocationArrayBody)
-    }
-
-    suspend fun loginAdmin(loginTyuterBody: LoginTyuterBody): Response<AdminResponse> {
-        return apiService.loginAdmin(loginTyuterBody)
-    }
-
-    suspend fun getTutors(): Response<GetTutorsResponse> {
-        return apiService.getTutors()
-    }
-
-    suspend fun statistics(employe_id: Int?): Response<StatisticResponse> {
-        return apiService.statistics(employe_id)
     }
 
     suspend fun examTable(semester: String?): Response<ExamTableResponse> {

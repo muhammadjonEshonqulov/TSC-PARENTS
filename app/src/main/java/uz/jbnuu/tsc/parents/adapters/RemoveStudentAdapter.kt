@@ -1,0 +1,61 @@
+package uz.jbnuu.tsc.parents.adapters
+
+import android.annotation.SuppressLint
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import uz.jbnuu.tsc.parents.R
+import uz.jbnuu.tsc.parents.databinding.ItemRemoveStudentBinding
+import uz.jbnuu.tsc.parents.model.getStudents.ParentGetStudentsData
+import uz.jbnuu.tsc.parents.utils.MyDiffUtil
+import uz.jbnuu.tsc.parents.utils.Prefs
+
+
+class RemoveStudentAdapter(val listener: OnItemClickListener) : RecyclerView.Adapter<RemoveStudentAdapter.MyViewHolder>() {
+
+    var dataProduct = emptyList<ParentGetStudentsData>()
+    var next: Int? = null
+
+    fun setData(newData: List<ParentGetStudentsData>) {
+        val diffUtil = MyDiffUtil(dataProduct, newData)
+        val diffUtilResult = DiffUtil.calculateDiff(diffUtil)
+        dataProduct = newData
+        diffUtilResult.dispatchUpdatesTo(this)
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(data: ParentGetStudentsData, type: Int)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val binding: ItemRemoveStudentBinding = ItemRemoveStudentBinding.inflate(LayoutInflater.from(parent.context), parent, false)// DataBindingUtil.inflate(LayoutInflater.from(parent.context),R.layout.item_all_notification, parent, false)
+        return MyViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        holder.bind(dataProduct[position])
+    }
+
+    override fun getItemCount(): Int = dataProduct.size
+
+    inner class MyViewHolder(private val binding: ItemRemoveStudentBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        @SuppressLint("SetTextI18n")
+        fun bind(data: ParentGetStudentsData) {
+            binding.name.text = data.familya + " " + data.ism + " " + data.otasi_ismi
+            binding.group.text = data.get_me?.group?.name + " guruh talabasi"
+
+            binding.delete.setOnClickListener {
+                listener.onItemClick(data, 1)
+            }
+            data.get_me?.image?.let {
+                Glide.with(binding.root.context)
+                    .load(it)
+                    .placeholder(R.drawable.ic_baseline_person_outline_24)
+                    .into(binding.imageUser)
+            }
+        }
+    }
+}

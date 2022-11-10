@@ -12,12 +12,10 @@ import uz.jbnuu.tsc.parents.app.App
 import uz.jbnuu.tsc.parents.data.Repository
 import uz.jbnuu.tsc.parents.model.history_location.LocationHistoryBody
 import uz.jbnuu.tsc.parents.model.history_location.LocationHistoryResponse
-import uz.jbnuu.tsc.parents.model.login.admin.AdminResponse
-import uz.jbnuu.tsc.parents.model.login.tyuter.LoginTyuterBody
-import uz.jbnuu.tsc.parents.model.login.tyuter.LoginTyuterResponse
 import uz.jbnuu.tsc.parents.utils.NetworkResult
 import uz.jbnuu.tsc.parents.utils.handleResponse
 import uz.jbnuu.tsc.parents.utils.hasInternetConnection
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,62 +33,13 @@ class LocationHistoryViewModel @Inject constructor(
             try {
                 val response = repository.remote.getLocationHistory(locationHistoryBody)
                 _getLocationHistoryResponse.send(handleResponse(response))
+            } catch (e: SocketTimeoutException) {
+                _getLocationHistoryResponse.send(NetworkResult.Error(App.context.getString(R.string.bad_network_message)))
             } catch (e: Exception) {
-                _getLocationHistoryResponse.send(NetworkResult.Error("Xatolik : " + e.message))
+                _getLocationHistoryResponse.send(NetworkResult.Error(App.context.getString(R.string.onother_error) + e.message))
             }
         } else {
             _getLocationHistoryResponse.send(NetworkResult.Error(App.context.getString(R.string.connection_error)))
-        }
-    }
-
-    private val _getAdminLocationHistoryResponse = Channel<NetworkResult<LocationHistoryResponse>>()
-    var getAdminLocationHistoryResponse = _getAdminLocationHistoryResponse.receiveAsFlow()
-
-    fun getAdminLocationHistory(adminlocationHistoryBody: LocationHistoryBody) = viewModelScope.launch {
-        _getAdminLocationHistoryResponse.send(NetworkResult.Loading())
-        if (hasInternetConnection(getApplication())) {
-            try {
-                val response = repository.remote.getAdminLocationHistory(adminlocationHistoryBody)
-                _getAdminLocationHistoryResponse.send(handleResponse(response))
-            } catch (e: Exception) {
-                _getAdminLocationHistoryResponse.send(NetworkResult.Error("Xatolik : " + e.message))
-            }
-        } else {
-            _getAdminLocationHistoryResponse.send(NetworkResult.Error(App.context.getString(R.string.connection_error)))
-        }
-    }
-
-    private val _loginAdminResponse = Channel<NetworkResult<AdminResponse>>()
-    var loginAdminResponse = _loginAdminResponse.receiveAsFlow()
-
-    fun loginAdmin(loginAdminBody: LoginTyuterBody) = viewModelScope.launch {
-        _loginAdminResponse.send(NetworkResult.Loading())
-        if (hasInternetConnection(getApplication())) {
-            try {
-                val response = repository.remote.loginAdmin(loginAdminBody)
-                _loginAdminResponse.send(handleResponse(response))
-            } catch (e: Exception) {
-                _loginAdminResponse.send(NetworkResult.Error("Xatolik : " + e.message))
-            }
-        } else {
-            _loginAdminResponse.send(NetworkResult.Error(App.context.getString(R.string.connection_error)))
-        }
-    }
-
-    private val _loginTyuterResponse = Channel<NetworkResult<LoginTyuterResponse>>()
-    var loginTyuterResponse = _loginTyuterResponse.receiveAsFlow()
-
-    fun loginTutor(loginTyuterBody: LoginTyuterBody) = viewModelScope.launch {
-        _loginTyuterResponse.send(NetworkResult.Loading())
-        if (hasInternetConnection(getApplication())) {
-            try {
-                val response = repository.remote.loginTyuter(loginTyuterBody)
-                _loginTyuterResponse.send(handleResponse(response))
-            } catch (e: Exception) {
-                _loginTyuterResponse.send(NetworkResult.Error("Xatolik : " + e.message))
-            }
-        } else {
-            _loginTyuterResponse.send(NetworkResult.Error(App.context.getString(R.string.connection_error)))
         }
     }
 }

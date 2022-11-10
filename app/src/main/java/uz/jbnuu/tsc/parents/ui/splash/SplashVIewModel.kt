@@ -16,6 +16,7 @@ import uz.jbnuu.tsc.parents.model.student.PushNotification
 import uz.jbnuu.tsc.parents.utils.NetworkResult
 import uz.jbnuu.tsc.parents.utils.handleResponse
 import uz.jbnuu.tsc.parents.utils.hasInternetConnection
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,8 +34,10 @@ class SplashVIewModel @Inject constructor(
             try {
                 val response = repository.remote.me()
                 _meResponse.send(handleResponse(response))
+            } catch (e: SocketTimeoutException) {
+                _meResponse.send(NetworkResult.Error(App.context.getString(R.string.bad_network_message)))
             } catch (e: Exception) {
-                _meResponse.send(NetworkResult.Error("Xatolik : " + e.message))
+                _meResponse.send(NetworkResult.Error(App.context.getString(R.string.onother_error) + e.message))
             }
         } else {
             _meResponse.send(NetworkResult.Error(App.context.getString(R.string.connection_error)))
@@ -50,8 +53,10 @@ class SplashVIewModel @Inject constructor(
             try {
                 val response = repository.remote.postNotification(full_url, notification)
                 _notificationResponse.send(handleResponse(response))
+            } catch (e: SocketTimeoutException) {
+                _notificationResponse.send(NetworkResult.Error(App.context.getString(R.string.bad_network_message)))
             } catch (e: Exception) {
-                _notificationResponse.send(NetworkResult.Error("Xatolik : " + e.message))
+                _notificationResponse.send(NetworkResult.Error(App.context.getString(R.string.onother_error) + e.message))
             }
         } else {
             _notificationResponse.send(NetworkResult.Error("Server bilan aloqa yo'q"))

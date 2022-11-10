@@ -118,7 +118,7 @@ class ReferenceFragment : BaseFragment<ReferenceFragmentBinding>(ReferenceFragme
                         }
                     } else {
                         it.data?.error?.let {
-                            snackBar(binding, " " + it)
+                            snackBar( " " + it)
                         }
                     }
                 }
@@ -127,7 +127,7 @@ class ReferenceFragment : BaseFragment<ReferenceFragmentBinding>(ReferenceFragme
                     if (it.code == 401) {
                         loginHemis()
                     } else {
-                        snackBar(binding, it.message.toString())
+                        snackBar( it.message.toString())
                     }
                 }
             }
@@ -148,14 +148,14 @@ class ReferenceFragment : BaseFragment<ReferenceFragmentBinding>(ReferenceFragme
                 }
                 is NetworkResult.Error -> {
                     closeLoader()
-                    snackBar(binding, it.message.toString())
+                    snackBar( it.message.toString())
                 }
             }
         }
     }
 
     private fun loginHemis() {
-        vm.loginHemis(LoginStudentBody(prefs.get(prefs.login, ""), prefs.get(prefs.password, "")))
+        vm.loginHemis(LoginStudentBody("",""))
         vm.loginHemisResponse.collectLA(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Loading -> {
@@ -171,13 +171,13 @@ class ReferenceFragment : BaseFragment<ReferenceFragmentBinding>(ReferenceFragme
                         }
                     } else {
                         it.data?.error?.let {
-                            snackBar(binding, " " + it)
+                            snackBar( " " + it)
                         }
                     }
                 }
                 is NetworkResult.Error -> {
                     closeLoader()
-                    snackBar(binding, it.message.toString())
+                    snackBar( it.message.toString())
                 }
             }
         }

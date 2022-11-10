@@ -67,7 +67,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                     marker.title("${location?.data_time}.")
                     location?.latitude?.let { lat ->
                         location?.longitude?.let { long ->
-                            mMap.isMyLocationEnabled = true
                             mMap.addMarker(MarkerOptions().position(LatLng(lat.toDouble(), long.toDouble())))
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lat.toDouble(), long.toDouble()), 18f))
                         }

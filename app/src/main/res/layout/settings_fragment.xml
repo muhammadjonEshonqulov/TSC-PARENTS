@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/action_bar_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cl_color_primary"
+        android:orientation="horizontal"
+        android:padding="@dimen/default_margin">
+
+        <ImageView
+            android:id="@+id/back_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/default_margin"
+            android:clickable="true"
+            android:clipToPadding="true"
+            android:focusable="true"
+            android:padding="7dp"
+            android:src="@drawable/ic_baseline_arrow_back_ios_24"
+            app:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/title_settings"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="7dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/montserrat_medium"
+            android:padding="7dp"
+            android:text="Sozlamalar"
+            android:textColor="@color/white"
+            android:textSize="@dimen/large_margin_size" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/change_tarif"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:foreground="?selectableItemBackground"
+        android:padding="@dimen/default_margin">
+
+        <ImageView
+            android:layout_width="@dimen/normal_size"
+            android:layout_height="@dimen/normal_size"
+            android:src="@drawable/ic_baseline_autorenew_24" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/montserrat_medium"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/default_margin"
+            android:text="Tarifni almashtirish"
+            android:textSize="@dimen/standard_text_size" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/default_text_color" />
+
+    <LinearLayout
+        android:id="@+id/change_own_data"
+        android:layout_width="match_parent"
+        android:foreground="?selectableItemBackground"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/default_margin">
+
+        <ImageView
+            android:layout_width="@dimen/normal_size"
+            android:layout_height="@dimen/normal_size"
+            android:src="@drawable/ic_baseline_autorenew_24" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/montserrat_medium"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/default_margin"
+            android:text="Shaxsiy ma'lumotlarni o'zgartirish"
+            android:textSize="@dimen/standard_text_size" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/default_text_color" />
+
+    <LinearLayout
+        android:id="@+id/remove_student"
+        android:layout_width="match_parent"
+        android:foreground="?selectableItemBackground"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/default_margin">
+
+        <ImageView
+            android:layout_width="@dimen/normal_size"
+            android:layout_height="@dimen/normal_size"
+            android:src="@drawable/ic_baseline_autorenew_24" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/montserrat_medium"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/default_margin"
+            android:text="Talabani uzish"
+            android:textSize="@dimen/standard_text_size" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/default_text_color" />
+</LinearLayout>

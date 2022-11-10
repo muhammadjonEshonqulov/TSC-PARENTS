@@ -42,6 +42,8 @@ class ExamTableFragment : BaseFragment<ExamTableFragmentBinding>(ExamTableFragme
         binding.backBtn.setOnClickListener {
             finish()
         }
+        binding.swipeRefreshLayout.isRefreshing = false
+        binding.swipeRefreshLayout.isEnabled = false
     }
 
     private fun setupRecycler() {
@@ -70,7 +72,7 @@ class ExamTableFragment : BaseFragment<ExamTableFragmentBinding>(ExamTableFragme
                         }
 
                     } else {
-                        snackBar(binding, "Hemis " + it.data?.error)
+                        snackBar( "Hemis " + it.data?.error)
                     }
                 }
                 is NetworkResult.Error -> {
@@ -78,7 +80,7 @@ class ExamTableFragment : BaseFragment<ExamTableFragmentBinding>(ExamTableFragme
                     if (it.code == 401) {
                         loginHemis()
                     } else {
-                        snackBar(binding, it.message.toString())
+                        snackBar( it.message.toString())
                     }
                 }
             }
@@ -107,7 +109,7 @@ class ExamTableFragment : BaseFragment<ExamTableFragmentBinding>(ExamTableFragme
                         }
 
                     } else {
-                        snackBar(binding, "Hemis " + it.data?.error)
+                        snackBar( "Hemis " + it.data?.error)
                     }
                 }
                 is NetworkResult.Error -> {
@@ -115,7 +117,7 @@ class ExamTableFragment : BaseFragment<ExamTableFragmentBinding>(ExamTableFragme
                     if (it.code == 401) {
                         loginHemis()
                     } else {
-                        snackBar(binding, it.message.toString())
+                        snackBar( it.message.toString())
                     }
                 }
             }
@@ -123,7 +125,7 @@ class ExamTableFragment : BaseFragment<ExamTableFragmentBinding>(ExamTableFragme
     }
 
     private fun loginHemis() {
-        vm.loginHemis(LoginStudentBody(prefs.get(prefs.login, ""), prefs.get(prefs.password, "")))
+        vm.loginHemis(LoginStudentBody("",""))
         vm.loginHemisResponse.collectLatestLA(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Loading -> {
@@ -139,13 +141,13 @@ class ExamTableFragment : BaseFragment<ExamTableFragmentBinding>(ExamTableFragme
                         }
                     } else {
                         it.data?.error?.let {
-                            snackBar(binding, " " + it)
+                            snackBar( " " + it)
                         }
                     }
                 }
                 is NetworkResult.Error -> {
                     closeLoader()
-                    snackBar(binding, it.message.toString())
+                    snackBar( it.message.toString())
                 }
             }
         }

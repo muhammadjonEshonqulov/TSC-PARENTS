@@ -13,11 +13,11 @@ import retrofit2.Response
 sealed class NetworkResult<T>(
     val data: T? = null,
     val message: String? = null,
-    val code: Int? = null
+    val code: Int? = null,
+    val errorCode: Int? = null
 ) {
     class Success<T>(data: T?, code: Int? = null) : NetworkResult<T>(data, code = code)
-    class Error<T>(message: String?, data: T? = null, code: Int? = null) :
-        NetworkResult<T>(data, message, code)
+    class Error<T>(message: String?, data: T? = null, code: Int? = null, errorCode: Int? = null) : NetworkResult<T>(data, message, code, errorCode)
 
     class Loading<T> : NetworkResult<T>()
 }
@@ -53,7 +53,8 @@ fun <T> handleResponse(response: Response<T>): NetworkResult<T> {
         }
         response.code() == 422 -> {
             val jsonObject = response.errorBody()?.string()?.let { JSONObject(it) }
-            return NetworkResult.Error(jsonObject?.getString("message"), code = 422)
+            val errorCode = jsonObject?.getInt("error")
+            return NetworkResult.Error(jsonObject?.getString("message"), code = 422, errorCode = errorCode)
         }
         response.isSuccessful -> {
             val data = response.body()

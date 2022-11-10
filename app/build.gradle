@@ -13,10 +13,10 @@ android {
 
     signingConfigs {
         playStoreConfig {
-            storeFile file('/home/Muhammadjon/StudioProjects/TSC-JBNUU/TSC.jks')
-            storePassword 'TSC_PASSWORD_JBNUU'
-            keyAlias 'TSC_PASSWORD_JBNUU'
-            keyPassword 'TSC_PASSWORD_JBNUU'
+            storeFile file('/home/Muhammadjon/StudioProjects/TSC-PARENTS/TSC_PARENTS.jks')
+            storePassword 'JBNUU_TSC_PARENTS_PASSWORD'
+            keyAlias 'JBNUU_TSC_PARENTS_PASSWORD'
+            keyPassword 'JBNUU_TSC_PARENTS_PASSWORD'
         }
     }
 
@@ -24,8 +24,8 @@ android {
         applicationId "uz.jbnuu.tsc.parents"
         minSdk 21
         targetSdk 32
-        versionCode 1
-        versionName "1.0.1"
+        versionCode 4
+        versionName "1.0.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

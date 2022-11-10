@@ -17,6 +17,7 @@ import uz.jbnuu.tsc.parents.model.reference.ReferenceResponse
 import uz.jbnuu.tsc.parents.utils.NetworkResult
 import uz.jbnuu.tsc.parents.utils.handleResponse
 import uz.jbnuu.tsc.parents.utils.hasInternetConnection
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,8 +35,10 @@ class ReferenceViewModel @Inject constructor(
             try {
                 val response = repository.remote.studentReference()
                 _referenceResponse.send(handleResponse(response))
+            } catch (e: SocketTimeoutException) {
+                _referenceResponse.send(NetworkResult.Error(App.context.getString(R.string.bad_network_message)))
             } catch (e: Exception) {
-                _referenceResponse.send(NetworkResult.Error("Xatolik : " + e.message))
+                _referenceResponse.send(NetworkResult.Error(App.context.getString(R.string.onother_error) + e.message))
             }
         } else {
             _referenceResponse.send(NetworkResult.Error(App.context.getString(R.string.connection_error)))
@@ -51,8 +54,10 @@ class ReferenceViewModel @Inject constructor(
             try {
                 val response = repository.remote.studentReferenceDownload(id)
                 _referenceDownloadResponse.send(handleResponse(response))
+            } catch (e: SocketTimeoutException) {
+                _referenceDownloadResponse.send(NetworkResult.Error(App.context.getString(R.string.bad_network_message)))
             } catch (e: Exception) {
-                _referenceDownloadResponse.send(NetworkResult.Error("Xatolik : " + e.message))
+                _referenceDownloadResponse.send(NetworkResult.Error(App.context.getString(R.string.onother_error) + e.message))
             }
         } else {
             _referenceDownloadResponse.send(NetworkResult.Error(App.context.getString(R.string.connection_error)))
@@ -68,8 +73,10 @@ class ReferenceViewModel @Inject constructor(
             try {
                 val response = repository.remote.loginHemis(loginHemisBody)
                 _loginHemisResponse.send(handleResponse(response))
+            } catch (e: SocketTimeoutException) {
+                _loginHemisResponse.send(NetworkResult.Error(App.context.getString(R.string.bad_network_message)))
             } catch (e: Exception) {
-                _loginHemisResponse.send(NetworkResult.Error("Xatolik : " + e.message))
+                _loginHemisResponse.send(NetworkResult.Error(App.context.getString(R.string.onother_error) + e.message))
             }
         } else {
             _loginHemisResponse.send(NetworkResult.Error(App.context.getString(R.string.connection_error)))

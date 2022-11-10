@@ -76,7 +76,7 @@ class PerformanceFragment : BaseFragment<PerformanceFragmentBinding>(Performance
                         }
 
                     } else {
-                        snackBar(binding, "Hemis " + it.data?.error)
+                        snackBar( "Hemis " + it.data?.error)
                     }
                 }
                 is NetworkResult.Error -> {
@@ -84,7 +84,7 @@ class PerformanceFragment : BaseFragment<PerformanceFragmentBinding>(Performance
                     if (it.code == 401) {
                         loginHemis()
                     } else {
-                        snackBar(binding, it.message.toString())
+                        snackBar( it.message.toString())
                     }
                 }
             }
@@ -138,7 +138,7 @@ class PerformanceFragment : BaseFragment<PerformanceFragmentBinding>(Performance
                         }
 
                     } else {
-                        snackBar(binding, "Hemis " + it.data?.error)
+                        snackBar( "Hemis " + it.data?.error)
                     }
                 }
                 is NetworkResult.Error -> {
@@ -146,7 +146,7 @@ class PerformanceFragment : BaseFragment<PerformanceFragmentBinding>(Performance
                     if (it.code == 401) {
                         loginHemis()
                     } else {
-                        snackBar(binding, it.message.toString())
+                        snackBar( it.message.toString())
                     }
                 }
             }
@@ -154,7 +154,7 @@ class PerformanceFragment : BaseFragment<PerformanceFragmentBinding>(Performance
     }
 
     private fun loginHemis() {
-        vm.loginHemis(LoginStudentBody(prefs.get(prefs.login, ""), prefs.get(prefs.password, "")))
+        vm.loginHemis(LoginStudentBody("",""))
         vm.loginHemisResponse.collectLA(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Loading -> {
@@ -170,13 +170,13 @@ class PerformanceFragment : BaseFragment<PerformanceFragmentBinding>(Performance
                         }
                     } else {
                         it.data?.error?.let {
-                            snackBar(binding, " " + it)
+                            snackBar( " " + it)
                         }
                     }
                 }
                 is NetworkResult.Error -> {
                     closeLoader()
-                    snackBar(binding, it.message.toString())
+                    snackBar( it.message.toString())
                 }
             }
         }

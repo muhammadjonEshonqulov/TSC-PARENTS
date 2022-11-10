@@ -106,7 +106,7 @@ class ScheduleFragment : BaseFragment<ScheduleFragmentBinding>(ScheduleFragmentB
                         }
 
                     } else {
-                        snackBar(binding, "Hemis " + it.data?.error)
+                        snackBar( "Hemis " + it.data?.error)
                     }
                 }
                 is NetworkResult.Error -> {
@@ -115,7 +115,7 @@ class ScheduleFragment : BaseFragment<ScheduleFragmentBinding>(ScheduleFragmentB
 //                        prefs.clear()
 //                        findNavController().navigateSafe(R.id.action_groupsFragment_to_loginFragment)
 //                    } else {
-                    snackBar(binding, it.message.toString())
+                    snackBar( it.message.toString())
 //                    }
                 }
             }
@@ -159,12 +159,12 @@ class ScheduleFragment : BaseFragment<ScheduleFragmentBinding>(ScheduleFragmentB
                             }
                         }
                     } else {
-                        snackBar(binding, "Hemis " + it.data?.error)
+                        snackBar( "Hemis " + it.data?.error)
                     }
                 }
                 is NetworkResult.Error -> {
                     closeLoader()
-                    snackBar(binding, it.message.toString())
+                    snackBar( it.message.toString())
                 }
             }
         }

@@ -171,7 +171,7 @@ class AttendanceFragment : BaseFragment<AttendanceFragmentBinding>(AttendanceFra
                         }
 
                     } else {
-                        snackBar(binding, "Hemis " + it.data?.error)
+                        snackBar( "Hemis " + it.data?.error)
                     }
                 }
                 is NetworkResult.Error -> {
@@ -179,7 +179,7 @@ class AttendanceFragment : BaseFragment<AttendanceFragmentBinding>(AttendanceFra
                     if (it.code == 401) {
                         loginHemis("semesters")
                     } else {
-                        snackBar(binding, it.message.toString())
+                        snackBar( it.message.toString())
                     }
                 }
             }
@@ -187,7 +187,7 @@ class AttendanceFragment : BaseFragment<AttendanceFragmentBinding>(AttendanceFra
     }
 
     private fun loginHemis(s: String) {
-        vm.loginHemis(LoginStudentBody(prefs.get(prefs.login, ""), prefs.get(prefs.password, "")))
+        vm.loginHemis(LoginStudentBody("", ""))
         vm.loginHemisResponse.collectLatestLA(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Loading -> {
@@ -203,13 +203,13 @@ class AttendanceFragment : BaseFragment<AttendanceFragmentBinding>(AttendanceFra
                         }
                     } else {
                         it.data?.error?.let {
-                            snackBar(binding, " " + it)
+                            snackBar( " " + it)
                         }
                     }
                 }
                 is NetworkResult.Error -> {
                     closeLoader()
-                    snackBar(binding, it.message.toString())
+                    snackBar( it.message.toString())
                 }
             }
         }
@@ -243,7 +243,7 @@ class AttendanceFragment : BaseFragment<AttendanceFragmentBinding>(AttendanceFra
                         }
 
                     } else {
-                        snackBar(binding, "Hemis " + it.data?.error)
+                        snackBar( "Hemis " + it.data?.error)
                     }
                 }
                 is NetworkResult.Error -> {
@@ -253,7 +253,7 @@ class AttendanceFragment : BaseFragment<AttendanceFragmentBinding>(AttendanceFra
 //                        prefs.clear()
 //                        findNavController().navigateSafe(R.id.action_groupsFragment_to_loginFragment)
                     } else {
-                        snackBar(binding, it.message.toString())
+                        snackBar( it.message.toString())
                     }
                 }
             }
@@ -279,7 +279,7 @@ class AttendanceFragment : BaseFragment<AttendanceFragmentBinding>(AttendanceFra
                         }
 
                     } else {
-                        snackBar(binding, "Hemis " + it.data?.error)
+                        snackBar( "Hemis " + it.data?.error)
                     }
                 }
                 is NetworkResult.Error -> {
@@ -289,7 +289,7 @@ class AttendanceFragment : BaseFragment<AttendanceFragmentBinding>(AttendanceFra
 //                        prefs.clear()
 //                        findNavController().navigateSafe(R.id.action_groupsFragment_to_loginFragment)
                     } else {
-                        snackBar(binding, it.message.toString())
+                        snackBar( it.message.toString())
                     }
                 }
             }

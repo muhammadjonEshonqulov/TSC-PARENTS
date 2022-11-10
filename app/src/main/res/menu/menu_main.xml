@@ -2,6 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/profile"
+        android:visible="false"
         android:icon="@drawable/ic_baseline_person_outline_24"
         android:title="Profile" />
     <item

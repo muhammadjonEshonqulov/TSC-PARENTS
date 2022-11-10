@@ -6,24 +6,20 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import uz.jbnuu.tsc.parents.R
 import uz.jbnuu.tsc.parents.adapters.LocationHistoryAdapter
 import uz.jbnuu.tsc.parents.base.BaseFragment
 import uz.jbnuu.tsc.parents.base.ProgressDialog
 import uz.jbnuu.tsc.parents.databinding.LocationHistoryFragmentBinding
 import uz.jbnuu.tsc.parents.model.history_location.LocationHistoryBody
 import uz.jbnuu.tsc.parents.model.history_location.LocationHistoryData
-import uz.jbnuu.tsc.parents.model.login.tyuter.LoginTyuterBody
 import uz.jbnuu.tsc.parents.model.send_location.SendLocationBody
 import uz.jbnuu.tsc.parents.ui.MapsActivity
 import uz.jbnuu.tsc.parents.utils.NetworkResult
 import uz.jbnuu.tsc.parents.utils.Prefs
 import uz.jbnuu.tsc.parents.utils.collectLA
-import uz.jbnuu.tsc.parents.utils.navigateSafe
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -46,11 +42,8 @@ class LocationHistoryFragment : BaseFragment<LocationHistoryFragmentBinding>(Loc
         arguments?.getInt("student_id")?.let {
             student_id = it
         }
-        if (prefs.get(prefs.role, 0) == 2) {
-            getLocationHistory(LocationHistoryBody(student_id, null, currentPage))
-        } else if (prefs.get(prefs.role, 0) == 7) {
-            getAdminLocationHistory(LocationHistoryBody(student_id, null, currentPage))
-        }
+
+        getLocationHistory(LocationHistoryBody(student_id, null, currentPage))
     }
 
     override fun onViewCreatedd(view: View, savedInstanceState: Bundle?) {
@@ -71,19 +64,14 @@ class LocationHistoryFragment : BaseFragment<LocationHistoryFragmentBinding>(Loc
                 intent.putExtras(bundle)
                 startActivity(intent)
             } else {
-                snackBar(binding, "Last location mavjud emas")
+                snackBar( "Last location mavjud emas")
             }
         } else if (type == 2) {
             if (totalPage > 0 && totalPage > currentPage) {
                 currentPage++
-                if (prefs.get(prefs.role, 0) == 2) {
-                    getLocationHistory(LocationHistoryBody(student_id, null, currentPage))
-                } else if (prefs.get(prefs.role, 0) == 7) {
-                    getAdminLocationHistory(LocationHistoryBody(student_id, null, currentPage))
-                }
+                getLocationHistory(LocationHistoryBody(student_id, null, currentPage))
             }
         }
-
     }
 
     override fun onClick(p0: View?) {
@@ -115,122 +103,19 @@ class LocationHistoryFragment : BaseFragment<LocationHistoryFragmentBinding>(Loc
                                     locationHistoryData = ArrayList()
                                 }
                                 if (it.isEmpty()) {
-                                    snackBar(binding, "Ushbu talabada joylashuvlar tarixi mavjud emas")
+                                    snackBar( "Ushbu talabada joylashuvlar tarixi mavjud emas")
                                 } else {
                                     locationHistoryAdapter.setData(it)
                                 }
                             }
                         }
                     } else {
-                        snackBar(binding, "status " + it.data?.status)
+                        snackBar( "status " + it.data?.status)
                     }
                 }
                 is NetworkResult.Error -> {
                     closeLoader()
-                    if (it.code == 401) {
-                        loginTutor(locationHistoryBody)
-                    } else {
-                        snackBar(binding, it.message.toString())
-                    }
-                }
-            }
-        }
-    }
-
-    private fun getAdminLocationHistory(locationHistoryBody: LocationHistoryBody) {
-        vm.getAdminLocationHistory(locationHistoryBody)
-        vm.getAdminLocationHistoryResponse.collectLA(lifecycleScope) {
-            when (it) {
-                is NetworkResult.Loading -> {
-                    showLoader()
-                }
-                is NetworkResult.Success -> {
-                    closeLoader()
-                    if (it.data?.status == 1) {
-                        it.data.apply {
-                            total_page?.let {
-                                totalPage = it
-                            }
-                            history?.let {
-                                if (locationHistoryData == null) {
-                                    locationHistoryData = ArrayList()
-                                }
-                                if (it.isEmpty()) {
-                                    snackBar(binding, "Ushbu tyutorda joylashuvlar tarixi mavjud emas")
-                                } else {
-                                    locationHistoryAdapter.setData(it)
-                                }
-                            }
-                        }
-                    } else {
-                        snackBar(binding, "status " + it.data?.status)
-                    }
-                }
-                is NetworkResult.Error -> {
-                    closeLoader()
-                    if (it.code == 401) {
-                        loginAdmin(locationHistoryBody)
-                    } else {
-                        snackBar(binding, it.message.toString())
-                    }
-                }
-            }
-        }
-    }
-
-    private fun loginTutor(locationHistoryBody: LocationHistoryBody) {
-        vm.loginTutor(LoginTyuterBody(prefs.get(prefs.login, ""), prefs.get(prefs.password, "")))
-        vm.loginTyuterResponse.collectLA(viewLifecycleOwner) {
-            when (it) {
-                is NetworkResult.Loading -> {
-                    showLoader()
-                }
-                is NetworkResult.Success -> {
-                    closeLoader()
-                    if (it.data?.status == 1) {
-                        it.data.apply {
-                            token?.let {
-                                prefs.save(prefs.token, it)
-                                getLocationHistory(locationHistoryBody)
-                            }
-
-                        }
-                    } else {
-                        snackBar(binding, "status " + it.data?.status)
-                    }
-                }
-                is NetworkResult.Error -> {
-                    closeLoader()
-                    snackBar(binding, it.message.toString())
-                }
-            }
-        }
-    }
-
-    private fun loginAdmin(locationHistoryBody: LocationHistoryBody) {
-        vm.loginAdmin(LoginTyuterBody(prefs.get(prefs.login, ""), prefs.get(prefs.password, "")))
-        vm.loginAdminResponse.collectLA(viewLifecycleOwner) {
-            when (it) {
-                is NetworkResult.Loading -> {
-                    showLoader()
-                }
-                is NetworkResult.Success -> {
-                    closeLoader()
-                    if (it.data?.status == 1) {
-                        it.data.apply {
-                            token?.let {
-                                prefs.save(prefs.token, it)
-                                getAdminLocationHistory(locationHistoryBody)
-                            }
-                        }
-                    }
-                }
-                is NetworkResult.Error -> {
-                    closeLoader()
-                    if (it.code == 401) {
-                        findNavController().navigateSafe(R.id.action_locationHistoryFragment_to_loginFragment)
-                    }
-                    snackBar(binding, it.message.toString())
+                    snackBar( it.message.toString())
                 }
             }
         }

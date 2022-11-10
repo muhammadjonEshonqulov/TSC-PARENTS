@@ -93,7 +93,7 @@ abstract class BaseFragment<VB : ViewBinding>(private val inflate: Inflate<VB>) 
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    fun snackBar(binding: ViewBinding, message: String) {
+    fun snackBar(message: String) {
         try {
             binding.root.let {
                 val snackbar = Snackbar.make(it, message, Snackbar.LENGTH_SHORT)

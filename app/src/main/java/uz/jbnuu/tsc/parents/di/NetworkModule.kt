@@ -1,12 +1,10 @@
 package uz.jbnuu.tsc.parents.di
 
-import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -19,6 +17,7 @@ import uz.jbnuu.tsc.parents.data.network.ApiService
 import uz.jbnuu.tsc.parents.utils.Constants.Companion.BASE_URL
 import uz.jbnuu.tsc.parents.utils.Constants.Companion.BASE_URL_HEMIS
 import uz.jbnuu.tsc.parents.utils.Prefs
+import uz.jbnuu.tsc.parents.utils.lg
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
@@ -29,7 +28,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideSharedPref(@ApplicationContext context: Context) = Prefs(context)
+    fun provideSharedPref() = Prefs(App.context)
 
     @Singleton
     @Provides
@@ -45,6 +44,7 @@ object NetworkModule {
     ): OkHttpClient {
         val builder = OkHttpClient().newBuilder()
             .addInterceptor { chain ->
+                lg("token->" + prefs.get(prefs.token, "..."))
                 val request = chain.request().newBuilder().addHeader("Authorization", prefs.get(prefs.token, "...")).build()
                 chain.proceed(request)
             }

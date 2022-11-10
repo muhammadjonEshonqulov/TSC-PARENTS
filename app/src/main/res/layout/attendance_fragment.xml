@@ -127,7 +127,7 @@
             <Spinner
                 android:id="@+id/spinner_weeks"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/normal_size" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

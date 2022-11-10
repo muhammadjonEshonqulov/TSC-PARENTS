@@ -71,7 +71,6 @@ class FirebaseService : FirebaseMessagingService() {
             .setSmallIcon(R.mipmap.ic_launcher)
             .build()
         message.data["code"]?.toInt()?.let {
-            lg("code in firebase "+it)
             prefs.save(prefs.error_code, it)
         }
         prefs.save(prefs.error, "Xatolik ->" + message.data["my_own_text"])

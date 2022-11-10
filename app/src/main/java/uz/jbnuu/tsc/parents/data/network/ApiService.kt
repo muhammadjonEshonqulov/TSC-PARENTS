@@ -3,41 +3,43 @@ package uz.jbnuu.tsc.parents.data.network
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
-import uz.jbnuu.tsc.parents.model.StatisticResponse
 import uz.jbnuu.tsc.parents.model.SubjectResponse
 import uz.jbnuu.tsc.parents.model.attendance.AttendanceResponse
 import uz.jbnuu.tsc.parents.model.examTable.ExamTableResponse
-import uz.jbnuu.tsc.parents.model.group.GroupResponse
+import uz.jbnuu.tsc.parents.model.getStudents.ParentGetStudentsResponse
 import uz.jbnuu.tsc.parents.model.history_location.LocationHistoryResponse
+import uz.jbnuu.tsc.parents.model.login.LoginParentsResponse
 import uz.jbnuu.tsc.parents.model.login.LogoutResponse
-import uz.jbnuu.tsc.parents.model.login.admin.AdminResponse
 import uz.jbnuu.tsc.parents.model.login.hemis.LoginHemisResponse
+import uz.jbnuu.tsc.parents.model.login.parents.ConnectParentResponse
+import uz.jbnuu.tsc.parents.model.login.parents.LoginParentBody
+import uz.jbnuu.tsc.parents.model.login.parents.LoginStudentToConnectParentBody
 import uz.jbnuu.tsc.parents.model.login.student.LoginStudentBody
-import uz.jbnuu.tsc.parents.model.login.student.LoginStudentResponse
-import uz.jbnuu.tsc.parents.model.login.tyuter.LoginTyuterBody
-import uz.jbnuu.tsc.parents.model.login.tyuter.LoginTyuterResponse
 import uz.jbnuu.tsc.parents.model.me.MeResponse
 import uz.jbnuu.tsc.parents.model.performance.PerformanceResponse
 import uz.jbnuu.tsc.parents.model.reference.ReferenceResponse
+import uz.jbnuu.tsc.parents.model.register.RegisterBody
+import uz.jbnuu.tsc.parents.model.register.RegisterResponse
+import uz.jbnuu.tsc.parents.model.remove.RemoveStudentBody
+import uz.jbnuu.tsc.parents.model.remove.RemoveStudentResponse
 import uz.jbnuu.tsc.parents.model.schedule.ScheduleResponse
 import uz.jbnuu.tsc.parents.model.semester.SemestersResponse
-import uz.jbnuu.tsc.parents.model.send_location.SendLocationArrayBody
-import uz.jbnuu.tsc.parents.model.send_location.SendLocationBody
-import uz.jbnuu.tsc.parents.model.send_location.SendLocationResponse
 import uz.jbnuu.tsc.parents.model.student.PushNotification
-import uz.jbnuu.tsc.parents.model.student.StudentResponse
 import uz.jbnuu.tsc.parents.model.subjects.SubjectsResponse
-import uz.jbnuu.tsc.parents.model.tutors.GetTutorsResponse
+import uz.jbnuu.tsc.parents.model.type_tarif.ChangeTarifBody
+import uz.jbnuu.tsc.parents.model.type_tarif.ChangeTarifResponse
+import uz.jbnuu.tsc.parents.model.type_tarif.TarifMatnResponse
+import uz.jbnuu.tsc.parents.model.type_tarif.TarifResponse
 import uz.jbnuu.tsc.parents.utils.Constants.Companion.CONTENT_TYPE
 import uz.jbnuu.tsc.parents.utils.Constants.Companion.SERVER_KEY
 
 interface ApiService {
 
-    @POST("login_student")
-    suspend fun loginStudent(@Body loginStudentBody: LoginStudentBody): Response<LoginStudentResponse>
+    @POST("login_parent")
+    suspend fun loginParents(@Body loginParentBody: LoginParentBody): Response<LoginParentsResponse>
 
-    @POST("login_tyutor")
-    suspend fun loginTyuter(@Body loginTyuterBody: LoginTyuterBody): Response<LoginTyuterResponse>
+    @POST("connect_parent_student")
+    suspend fun connectParentStudent(@Body loginStudentToConnectParentBody: LoginStudentToConnectParentBody): Response<ConnectParentResponse>
 
     @Headers("Authorization: key=$SERVER_KEY", "Content-Type:$CONTENT_TYPE")
     @POST
@@ -46,8 +48,29 @@ interface ApiService {
     @POST("auth/login")
     suspend fun loginHemis(@Body loginHemisBody: LoginStudentBody): Response<LoginHemisResponse>
 
+    @POST("create_parent")
+    suspend fun createParent(@Body registerBody: RegisterBody): Response<RegisterResponse>
+
     @GET("account/me")
     suspend fun me(): Response<MeResponse>
+
+    @GET("tarif_matn")
+    suspend fun tarifMatn(): Response<TarifMatnResponse>
+
+    @GET("parent_get_students")
+    suspend fun parentGetStudents(): Response<ParentGetStudentsResponse>
+
+    @GET("get_tarifs")
+    suspend fun getTarifsme(): Response<TarifResponse>
+
+    @POST("update_tarif")
+    suspend fun updateTarif(@Body changeTarifBody: ChangeTarifBody): Response<ChangeTarifResponse>
+
+    @POST("update_parent")
+    suspend fun updateParent(@Body registerBody: RegisterBody): Response<TarifMatnResponse>
+
+    @POST("disconnect_parent_student")
+    suspend fun disconnectParentStudent(@Body removeStudentBody: RemoveStudentBody): Response<RemoveStudentResponse>
 
     @GET("student/reference")
     suspend fun studentReference(): Response<ReferenceResponse>
@@ -76,38 +99,8 @@ interface ApiService {
     @GET("logout")
     suspend fun logout(): Response<LogoutResponse>
 
-    @GET("get_groups")
-    suspend fun getGroups(): Response<GroupResponse>
-
-    @GET("get_students")
-    suspend fun getStudents(@Query("group_id") group_id: Int?, @Query("key") key: String?, @Query("value") value: String?): Response<StudentResponse>
-
-    @GET("get_history_locations")
+    @GET("parent_get_history_locations")
     suspend fun getLocationHistory(@Query("student_id") student_id: Int?, @Query("pagination") pagination: Int?, @Query("page") page: Int?): Response<LocationHistoryResponse>
-
-    @POST("send_location")
-    suspend fun sendLocation(@Body sendLocationBody: SendLocationBody): Response<SendLocationResponse>
-
-    @POST("send_location1")
-    suspend fun sendLocation1(@Body sendLocationBody: SendLocationBody): Response<SendLocationResponse>
-
-    @POST("send_location_array")
-    suspend fun sendLocationArray(@Body sendLocationArrayBody: SendLocationArrayBody): Response<LogoutResponse>
-
-    @POST("send_location_array1")
-    suspend fun sendLocationArray1(@Body sendLocationArrayBody: SendLocationArrayBody): Response<LogoutResponse>
-
-    @POST("login_admin")
-    suspend fun loginAdmin(@Body loginTyuterBody: LoginTyuterBody): Response<AdminResponse>
-
-    @GET("get_tutors")
-    suspend fun getTutors(): Response<GetTutorsResponse>
-
-    @GET("get_history_locations1")
-    suspend fun getAdminLocationHistory(@Query("employe_id") employe_id: Int?, @Query("pagination") pagination: Int?, @Query("page") page: Int?): Response<LocationHistoryResponse>
-
-    @GET("statistics")
-    suspend fun statistics(@Query("employe_id") employe_id: Int?): Response<StatisticResponse>
 
     @GET("education/exam-table")
     suspend fun examTable(@Query("semester") semester: String?): Response<ExamTableResponse>

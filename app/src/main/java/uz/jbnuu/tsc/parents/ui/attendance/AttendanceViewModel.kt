@@ -18,6 +18,7 @@ import uz.jbnuu.tsc.parents.model.subjects.SubjectsResponse
 import uz.jbnuu.tsc.parents.utils.NetworkResult
 import uz.jbnuu.tsc.parents.utils.handleResponse
 import uz.jbnuu.tsc.parents.utils.hasInternetConnection
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,8 +36,10 @@ class AttendanceViewModel @Inject constructor(
             try {
                 val response = repository.remote.semesters()
                 _semestersResponse.send(handleResponse(response))
+            } catch (e: SocketTimeoutException) {
+                _semestersResponse.send(NetworkResult.Error(App.context.getString(R.string.bad_network_message)))
             } catch (e: Exception) {
-                _semestersResponse.send(NetworkResult.Error("Xatolik : " + e.message))
+                _semestersResponse.send(NetworkResult.Error(App.context.getString(R.string.onother_error) + e.message))
             }
         } else {
             _semestersResponse.send(NetworkResult.Error(App.context.getString(R.string.connection_error)))
@@ -52,8 +55,10 @@ class AttendanceViewModel @Inject constructor(
             try {
                 val response = repository.remote.attendance(semester)
                 _attendanceResponse.send(handleResponse(response))
+            } catch (e: SocketTimeoutException) {
+                _attendanceResponse.send(NetworkResult.Error(App.context.getString(R.string.bad_network_message)))
             } catch (e: Exception) {
-                _attendanceResponse.send(NetworkResult.Error("Xatolik : " + e.message))
+                _attendanceResponse.send(NetworkResult.Error(App.context.getString(R.string.onother_error) + e.message))
             }
         } else {
             _attendanceResponse.send(NetworkResult.Error(App.context.getString(R.string.connection_error)))
@@ -69,8 +74,10 @@ class AttendanceViewModel @Inject constructor(
             try {
                 val response = repository.remote.subjects()
                 _subjectsResponse.send(handleResponse(response))
+            } catch (e: SocketTimeoutException) {
+                _subjectsResponse.send(NetworkResult.Error(App.context.getString(R.string.bad_network_message)))
             } catch (e: Exception) {
-                _subjectsResponse.send(NetworkResult.Error("Xatolik : " + e.message))
+                _subjectsResponse.send(NetworkResult.Error(App.context.getString(R.string.onother_error) + e.message))
             }
         } else {
             _subjectsResponse.send(NetworkResult.Error(App.context.getString(R.string.connection_error)))
@@ -86,8 +93,10 @@ class AttendanceViewModel @Inject constructor(
 //            try {
 //                val response = repository.remote.subject()
 //                _subjectResponse.send(handleResponse(response))
+//            } catch (e: SocketTimeoutException) {
+//                _getStudentsForAttendanceResponse.send(NetworkResult.Error(App.context.getString(R.string.bad_network_message)))
 //            } catch (e: Exception) {
-//                _subjectResponse.send(NetworkResult.Error("Xatolik : " + e.message))
+//                _getStudentsForAttendanceResponse.send(NetworkResult.Error(App.context.getString(R.string.onother_error) + e.message))
 //            }
 //        } else {
 //            _subjectResponse.send(NetworkResult.Error(App.context.getString(R.string.connection_error)))
@@ -103,8 +112,10 @@ class AttendanceViewModel @Inject constructor(
             try {
                 val response = repository.remote.loginHemis(loginHemisBody)
                 _loginHemisResponse.send(handleResponse(response))
+            } catch (e: SocketTimeoutException) {
+                _loginHemisResponse.send(NetworkResult.Error(App.context.getString(R.string.bad_network_message)))
             } catch (e: Exception) {
-                _loginHemisResponse.send(NetworkResult.Error("Xatolik : " + e.message))
+                _loginHemisResponse.send(NetworkResult.Error(App.context.getString(R.string.onother_error) + e.message))
             }
         } else {
             _loginHemisResponse.send(NetworkResult.Error(App.context.getString(R.string.connection_error)))

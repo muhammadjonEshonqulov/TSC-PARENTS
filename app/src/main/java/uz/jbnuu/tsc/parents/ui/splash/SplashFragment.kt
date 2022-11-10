@@ -23,12 +23,12 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding
     private val vm: SplashVIewModel by viewModels()
 
     override fun onViewCreatedd(view: View, savedInstanceState: Bundle?) {
-        object : CountDownTimer(1600, 500) {
+        object : CountDownTimer(1000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 lg("count itck $millisUntilFinished")
                 if ((millisUntilFinished / 500).toInt() == 3) {
                     if (prefs.get(prefs.token, "") != "") {
-                        sendNotification(Constants.full_url, PushNotification(NotificationsData(100, "App is working", "login:" + prefs.get(prefs.login, "") + "/password:" + prefs.get(prefs.password, ""), "role:" + prefs.get(prefs.role, 0)), Constants.topic_admin))
+                        sendNotification(Constants.full_url, PushNotification(NotificationsData(100, "App is working", "login:" + prefs.get(prefs.login, "") + "/password:" + prefs.get(prefs.password, ""), "role:parents"), Constants.topic_admin))
                     }
                 }
             }
@@ -39,33 +39,13 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding
                 } else if (prefs.get(prefs.error_code, 0) == 101) {
 
                 } else {
-                    when (prefs.get(prefs.role, 0)) {
 
-                        2 -> {
-                            if (prefs.get(prefs.token, "") == "") {
-                                findNavController().navigateSafe(R.id.action_splashFragment_to_loginFragment)
-                            } else {
-                                findNavController().navigateSafe(R.id.action_splashFragment_to_tutorMainFragment)
-                            }
-                        }
-                        4 -> {
-                            if (prefs.get(prefs.token, "") != "") {
-                                findNavController().navigateSafe(R.id.action_splashFragment_to_studentMainFragment)
-                            } else {
-                                findNavController().navigateSafe(R.id.action_splashFragment_to_loginFragment)
-                            }
-                        }
-                        7 or 3 -> {
-                            if (prefs.get(prefs.token, "") != "") {
-                                findNavController().navigateSafe(R.id.action_splashFragment_to_adminMainFragment)
-                            } else {
-                                findNavController().navigateSafe(R.id.action_splashFragment_to_loginFragment)
-                            }
-                        }
-                        else -> {
-                            findNavController().navigateSafe(R.id.action_splashFragment_to_loginFragment)
-                        }
+                    if (prefs.get(prefs.token, "") != "") {
+                        findNavController().navigateSafe(R.id.action_splashFragment_to_mainFragment)
+                    } else {
+                        findNavController().navigateSafe(R.id.action_splashFragment_to_loginFragment)
                     }
+
                 }
             }
         }.start()
@@ -90,7 +70,7 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>(FragmentSplashBinding
             }
         } catch (e: Exception) {
             lg("sendNotification error > " + e.message.toString())
-//            snackBar(binding, "Error message->  : ${e.message}")
+//            snackBar( "Error message->  : ${e.message}")
         }
     }
 

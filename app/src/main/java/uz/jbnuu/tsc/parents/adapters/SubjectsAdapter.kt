@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import uz.jbnuu.tsc.parents.R
+import uz.jbnuu.tsc.parents.app.App
 import uz.jbnuu.tsc.parents.databinding.CustomSpinnerItemBinding
 import uz.jbnuu.tsc.parents.model.subjects.SubjectsData
 
@@ -28,7 +29,7 @@ class SubjectsAdapter(val context: Context, var dataSource: List<SubjectsData>) 
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val inflater: LayoutInflater =
-            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            App.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = inflater.inflate(R.layout.custom_spinner_item, parent, false)
         binding = CustomSpinnerItemBinding.bind(view)
         var vh = ItemHolder(binding.root)

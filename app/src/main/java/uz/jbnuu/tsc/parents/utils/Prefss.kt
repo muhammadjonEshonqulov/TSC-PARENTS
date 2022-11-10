@@ -15,23 +15,23 @@ class Prefs @Inject constructor(context: Context) {
     val language = "language"
     val token = "token"
     val login = "login"
+    val tarif_id = "tarif_id"
+    val active = "active"
     val semester = "semester"
     val image = "image"
     val group = "group"
+    val person_count = "person_count"
     val firebaseToken = "firebaseToken"
     val error_code = "error_code"
     val error = "error"
     val password = "password"
-//    val tutorLogin = "tutorLogin"
-//    val tutorPassword = "tutorPassword"
     val hemisToken = "hemisToken"
     val fam = "fam"
     val name = "name"
-    val loginStop = "loginStop"
-    val role = "role" // 7-Admin 2-Tyutor 3-Developer 4-Student
-
-
-
+    val lastname = "lastname"
+    val loginHemis = "loginHemis"
+    val passwordHemis = "passwordHemis"
+//    val role = "role" // 7-Admin 2-Tyutor 3-Developer 4-Student
 
     fun save(key: String, value: Int) {
         prefs.edit().putInt(key, value).apply()

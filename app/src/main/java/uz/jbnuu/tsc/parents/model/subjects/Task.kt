@@ -19,6 +19,7 @@ data class Task(
     val name: String?,
     val comment: String?,
     val max_ball: Int?,
+    var student_id: Int?,
     val deadline: Long?,
     @TypeConverters(TrainingTypeConverter::class)
     val trainingType: TrainingType?,

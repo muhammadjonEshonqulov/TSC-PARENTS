@@ -3,12 +3,14 @@
     <string name="MAPS_API_KEY">AIzaSyDNO3_ZH63I8tEL1bkqwmdrkKe0aavkgTk</string>
     <string name="close">Yopmoq</string>
     <string name="connection_error">Tarmoqqa ulanish mavjud emas</string>
+    <string name="bad_network_message">Serverga bog\'lanish amalga oshmadi. Tarmoqqa ulanganligingizni tekshirib ko\'ring.</string>
+    <string name="onother_error">"Kutilmagan xatolik : "</string>
 
 
-    <string-array name="array">
-        <item>Tyutor</item>
-        <item>Talaba</item>
-        <item>Admin</item>
-    </string-array>
+    <!--    <string-array name="array">-->
+<!--        <item>Tyutor</item>-->
+<!--        <item>Talaba</item>-->
+<!--        <item>Admin</item>-->
+<!--    </string-array>-->
 
 </resources>

@@ -3,25 +3,22 @@ package uz.jbnuu.tsc.parents.adapters
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
+import com.bumptech.glide.Glide
 import uz.jbnuu.tsc.parents.R
 import uz.jbnuu.tsc.parents.databinding.ItemStudentBinding
-import uz.jbnuu.tsc.parents.model.history_location.LocationHistoryData
-import uz.jbnuu.tsc.parents.model.student.StudentData
+import uz.jbnuu.tsc.parents.model.getStudents.ParentGetStudentsData
 import uz.jbnuu.tsc.parents.utils.MyDiffUtil
-import java.text.SimpleDateFormat
-import java.util.*
+import uz.jbnuu.tsc.parents.utils.Prefs
 
 
 class StudentAdapter(val listener: OnItemClickListener) : RecyclerView.Adapter<StudentAdapter.MyViewHolder>() {
 
-    var dataProduct = emptyList<StudentData>()
+    var dataProduct = emptyList<ParentGetStudentsData>()
     var next: Int? = null
 
-    fun setData(newData: List<StudentData>) {
+    fun setData(newData: List<ParentGetStudentsData>) {
         val diffUtil = MyDiffUtil(dataProduct, newData)
         val diffUtilResult = DiffUtil.calculateDiff(diffUtil)
         dataProduct = newData
@@ -29,7 +26,7 @@ class StudentAdapter(val listener: OnItemClickListener) : RecyclerView.Adapter<S
     }
 
     interface OnItemClickListener {
-        fun onItemClick(data: StudentData, type: Int)
+        fun onItemClick(data: ParentGetStudentsData, type: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -45,93 +42,40 @@ class StudentAdapter(val listener: OnItemClickListener) : RecyclerView.Adapter<S
 
     inner class MyViewHolder(private val binding: ItemStudentBinding) : RecyclerView.ViewHolder(binding.root) {
 
-
-        @SuppressLint("SetTextI18n", "SimpleDateFormat")
-        fun bind(data: StudentData) {
-            if (bindingAdapterPosition % 2 == 1) {
-                binding.itemBack.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.items_color_0))
+        @SuppressLint("SetTextI18n")
+        fun bind(data: ParentGetStudentsData) {
+            binding.name.text = data.familya + " " + data.ism + " " + data.otasi_ismi
+            binding.group.text = data.get_me?.group?.name + " guruh talabasi"
+            val prefs = Prefs(binding.root.context)
+            val active = prefs.get(prefs.active, false)
+            if (active) {
+                binding.itemBack.alpha = 1f
             } else {
-                binding.itemBack.setBackgroundColor(ContextCompat.getColor(binding.root.context, R.color.items_color_1))
+                binding.itemBack.alpha = 0.5f
             }
-            if (data.last_location != null) {
-                binding.lastLocation.alpha = 1f
-                binding.historyLocations.alpha = 1f
-            } else {
-                binding.lastLocation.alpha = 0.5f
-                binding.historyLocations.alpha = 0.5f
-            }
-            var fio = ""
-            binding.studentId.text = data.auth_id
-            try {
-                data.familya?.let {
-                    fio += data.familya.substring(0, 1).uppercase() + data.familya.substring(1).lowercase()
+            binding.itemBack.setOnClickListener {
+                if (active) {
+                    listener.onItemClick(data, 1)
+                } else {
+                    listener.onItemClick(data, 2)
                 }
-                data.ism?.let {
-                    fio += " " + data.ism.substring(0, 1).uppercase() + data.ism.substring(1).lowercase()
-                }
-                data.otasi_ismi?.let {
-                    fio += " " + data.otasi_ismi.substring(0, 1).uppercase() + data.otasi_ismi.substring(1).lowercase()
-                }
-                binding.fullName.text = fio
-
-            } catch (e: Exception) {
-
             }
-            binding.passport.text = data.passport
-            binding.address.text = data.viloyat?.split(" ")?.first() + " " + data.viloyat?.split(" ")?.last()?.substring(0, 3) + ". " + data.tuman?.split(" ")?.first() + " " + data.tuman?.split(" ")?.last()?.substring(0, 3) + "."
-
-            binding.lastLocation.setOnClickListener {
-                listener.onItemClick(data, 1)
+            data.get_me?.image?.let {
+                Glide.with(binding.root.context)
+                    .load(it)
+                    .placeholder(R.drawable.ic_baseline_person_outline_24)
+                    .into(binding.imageUser)
             }
-            binding.historyLocations.setOnClickListener {
-                listener.onItemClick(data, 2)
-            }
-
-            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-            val currentDate = sdf.format(Date())
-
-            val year = currentDate.split(" ").first().split("-").first().toInt()
-            val month = currentDate.split(" ").first().split("-")[1].toInt()
-            val day = currentDate.split(" ").first().split("-").last().toInt()
-            val hour = currentDate.split(" ").last().split(":").first().toInt()
-            val minute: Int = currentDate.split(" ").last().split(":")[1].toInt()
-            val sekunt = currentDate.split(" ").last().split(":").last().toInt()
-
-            if (data.last_location != null) {
-
-                data.last_location.let {
-                    val lastLocation: LocationHistoryData = Gson().fromJson(data.last_location, LocationHistoryData::class.java)
-                    val yearBase = lastLocation.data_time?.split(" ")?.first()?.split("-")?.first()?.toInt()
-                    val monthBase = lastLocation.data_time?.split(" ")?.first()?.split("-")?.get(1)?.toInt()
-                    val dayBase = lastLocation.data_time?.split(" ")?.first()?.split("-")?.last()?.toInt()
-                    val hourBase = lastLocation.data_time?.split(" ")?.last()?.split(":")?.first()?.toInt()
-                    val minuteBase = lastLocation.data_time?.split(" ")?.last()?.split(":")?.get(1)?.toInt()
-                    val sekuntBase = lastLocation.data_time?.split(" ")?.last()?.split(":")?.last()?.toInt()
-
-                    if (year == yearBase && monthBase == month && dayBase == day && hour == hourBase) {
-                        minuteBase?.let {
-                            sekuntBase?.let {
-                                if (minute - minuteBase > 1) {
-                                    binding.statusStudent.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.new_tab_color))
-                                } else if (minute == minuteBase && sekunt - sekuntBase < 10) {
-                                    binding.statusStudent.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.green))
-                                } else if (minute - minuteBase == 1 && sekunt - (sekuntBase - 60) < 10) {
-                                    binding.statusStudent.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.green))
-                                } else {
-                                    binding.statusStudent.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.new_tab_color))
-                                }
-                            }
-                        }
-
-                    } else {
-                        binding.statusStudent.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.new_tab_color))
-                    }
-
-                }
-            } else {
-                binding.statusStudent.setColorFilter(ContextCompat.getColor(binding.root.context, R.color.new_tab_color))
-            }
-
+//            binding.listLessons.adapter = lessonsAdapter
+//            binding.listLessons.layoutManager = LinearLayoutManager(binding.root.context)
+//            data.schedules?.let {
+//                lessonsAdapter.setData(it)
+//            }
+//
+//            data.lesson_date?.let {
+//                binding.dateWeek.text = getDateTime(it)
+//                binding.weekDay.text = getDayOfWeek(it)
+//            }
         }
     }
 }

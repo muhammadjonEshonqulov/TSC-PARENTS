@@ -25,8 +25,8 @@ interface MyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTaskData(data: List<Task>)
 
-    @Query("select *  from Task order by deadline ASC")
-    fun getTaskData(): Flow<List<Task>>
+    @Query("select *  from Task where student_id=:student_id order by deadline ASC")
+    fun getTaskData(student_id: Int): Flow<List<Task>>
 
     @Query("delete from Task")
     suspend fun clearTaskData()
